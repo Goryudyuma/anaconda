@@ -89,3 +89,28 @@ func (a TwitterApi) GetListMembersBySlug(listname string, owner_screen_name stri
 	a.queryQueue <- query{a.baseUrl + "/lists/members.json", v, &users, _GET, response_ch}
 	return users, (<-response_ch).err
 }
+
+// Implement /lists/members/destroy by list_slug with (owner_id OR owner_screen_name) and screen_name
+func (a TwitterApi) RemoveMemberFromList(listname string, remove_user_screen_name string, remove_user_id int64, owner_screen_name string, owner_id int64, v url.Values) (users UserCursor, err error) {
+	if v == nil {
+		v = url.Values{}
+	}
+	v.Set("slug", listname)
+
+	if remove_user_screen_name != "" {
+		v.Set("screen_name", remove_user_screen_name)
+	}
+	if remove_user_id != 0 {
+		v.Set("user_id", strconv.FormInt(remove_user_id, 10))
+	}
+	if owner_screen_name != "" {
+		v.Set("owner_screen_name", owner_screen_name)
+	}
+	if owner_id != 0 {
+		v.Set("owner_id", strconv.FormInt(owner_id, 10))
+	}
+
+	response_ch := make(chan response)
+	a.queryQueue <- query{a.baseUrl + "lists/members/destroy.json", v, &users, _POST, response_ch}
+	return users, (<-response_ch).err
+}
