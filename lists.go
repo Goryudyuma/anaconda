@@ -111,6 +111,6 @@ func (a TwitterApi) RemoveMemberFromList(listname string, remove_user_screen_nam
 	}
 
 	response_ch := make(chan response)
-	a.queryQueue <- query{a.baseUrl + "lists/members/destroy.json", v, &users, _POST, response_ch}
+	a.queryQueue <- query{a.baseUrl + "/lists/members/destroy.json", v, &users, _POST, response_ch}
 	return users, (<-response_ch).err
 }
