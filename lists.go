@@ -101,13 +101,13 @@ func (a TwitterApi) RemoveMemberFromList(listname string, remove_user_screen_nam
 		v.Set("screen_name", remove_user_screen_name)
 	}
 	if remove_user_id != 0 {
-		v.Set("user_id", strconv.FormInt(remove_user_id, 10))
+		v.Set("user_id", strconv.FormatInt(remove_user_id, 10))
 	}
 	if owner_screen_name != "" {
 		v.Set("owner_screen_name", owner_screen_name)
 	}
 	if owner_id != 0 {
-		v.Set("owner_id", strconv.FormInt(owner_id, 10))
+		v.Set("owner_id", strconv.FormatInt(owner_id, 10))
 	}
 
 	response_ch := make(chan response)
