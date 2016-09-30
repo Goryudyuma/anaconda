@@ -124,7 +124,11 @@ func (a TwitterApi) AddUserToListIds(user_ids []int64, slug string, owner_id int
 			return resusers, err
 		}
 	}
-	user_ids = user_ids[:100]
+	length := 100
+	if len(user_ids) < length {
+		length = len(user_ids)
+	}
+	user_ids = user_ids[:length]
 	if v == nil {
 		v = url.Values{}
 	}
@@ -157,7 +161,11 @@ func (a TwitterApi) RemoveUserToListIds(user_ids []int64, slug string, owner_id 
 			return resusers, err
 		}
 	}
-	user_ids = user_ids[:100]
+	length := 100
+	if len(user_ids) < length {
+		length = len(user_ids)
+	}
+	user_ids = user_ids[:length]
 	if v == nil {
 		v = url.Values{}
 	}
