@@ -114,3 +114,67 @@ func (a TwitterApi) RemoveMemberFromList(listname string, remove_user_screen_nam
 	a.queryQueue <- query{a.baseUrl + "/lists/members/destroy.json", v, &users, _POST, response_ch}
 	return users, (<-response_ch).err
 }
+
+// AddUserToListIds implements /lists/members/create_all.json
+func (a TwitterApi) AddUserToListIds(user_ids []int64, listID int64, v url.Values) (users []User, err error) {
+	if len(user_ids) == 0 {
+		return make([]User, 0), nil
+	}
+	resusers, err := AddUserToListIds(user_ids[100:], listID, v)
+	user_ids = user_ids[:100]
+	if err != nil {
+		return resusers, err
+	}
+	if v == nil {
+		v = url.Values{}
+	}
+
+	var user_ids_string string
+	for i, v := range user_ids {
+		user_ids_string += strconv.FormatInt(v, 10)
+		if i != len(user_ids)-1 {
+			user_ids_string += ","
+		}
+	}
+
+	v.Set("list_id", strconv.FormatInt(listID, 10))
+	v.Set("user_id", user_ids_string)
+
+	var addUserToListResponse AddUserToListResponse
+
+	response_ch := make(chan response)
+	a.queryQueue <- query{a.baseUrl + "/lists/members/create_all.json", v, &addUserToListResponse, _POST, response_ch}
+	return append(addUserToListResponse.Users, resusers...), (<-response_ch).err
+}
+
+// RemoveUserToListIds implements /lists/members/destroy_all.json
+func (a TwitterApi) RemoveUserToListIds(user_ids []int64, listID int64, v url.Values) (users []User, err error) {
+	if len(user_ids) == 0 {
+		return make([]User, 0), nil
+	}
+	resusers, err := RemoveUserToListIds(user_ids[100:], listID, v)
+	user_ids = user_ids[:100]
+	if err != nil {
+		return resusers, err
+	}
+	if v == nil {
+		v = url.Values{}
+	}
+
+	var user_ids_string string
+	for i, v := range user_ids {
+		user_ids_string += strconv.FormatInt(v, 10)
+		if i != len(user_ids)-1 {
+			user_ids_string += ","
+		}
+	}
+
+	v.Set("list_id", strconv.FormatInt(listID, 10))
+	v.Set("user_id", user_ids_string)
+
+	var addUserToListResponse AddUserToListResponse
+
+	response_ch := make(chan response)
+	a.queryQueue <- query{a.baseUrl + "/lists/members/destroy_all.json", v, &addUserToListResponse, _POST, response_ch}
+	return append(addUserToListResponse.Users, resusers...), (<-response_ch).err
+}
