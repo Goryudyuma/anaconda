@@ -117,14 +117,14 @@ func (a TwitterApi) RemoveMemberFromList(listname string, remove_user_screen_nam
 
 // AddUserToListIds implements /lists/members/create_all.json
 func (a TwitterApi) AddUserToListIds(user_ids []int64, slug string, owner_id int64, v url.Values) (users []User, err error) {
-	if len(user_ids) == 0 {
-		return make([]User, 0), nil
+	resusers := make([]User, 0, 0)
+	if len(user_ids) > 100 {
+		resusers, err := a.AddUserToListIds(user_ids[100:], slug, owner_id, v)
+		if err != nil {
+			return resusers, err
+		}
 	}
-	resusers, err := a.AddUserToListIds(user_ids[100:], slug, owner_id, v)
 	user_ids = user_ids[:100]
-	if err != nil {
-		return resusers, err
-	}
 	if v == nil {
 		v = url.Values{}
 	}
@@ -150,14 +150,14 @@ func (a TwitterApi) AddUserToListIds(user_ids []int64, slug string, owner_id int
 
 // RemoveUserToListIds implements /lists/members/destroy_all.json
 func (a TwitterApi) RemoveUserToListIds(user_ids []int64, slug string, owner_id int64, v url.Values) (users []User, err error) {
-	if len(user_ids) == 0 {
-		return make([]User, 0), nil
+	resusers := make([]User, 0, 0)
+	if len(user_ids) > 100 {
+		resusers, err := a.RemoveUserToListIds(user_ids[100:], slug, owner_id, v)
+		if err != nil {
+			return resusers, err
+		}
 	}
-	resusers, err := a.RemoveUserToListIds(user_ids[100:], slug, owner_id, v)
 	user_ids = user_ids[:100]
-	if err != nil {
-		return resusers, err
-	}
 	if v == nil {
 		v = url.Values{}
 	}
