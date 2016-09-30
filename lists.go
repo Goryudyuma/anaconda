@@ -120,7 +120,7 @@ func (a TwitterApi) AddUserToListIds(user_ids []int64, listID int64, v url.Value
 	if len(user_ids) == 0 {
 		return make([]User, 0), nil
 	}
-	resusers, err := AddUserToListIds(user_ids[100:], listID, v)
+	resusers, err := a.AddUserToListIds(user_ids[100:], listID, v)
 	user_ids = user_ids[:100]
 	if err != nil {
 		return resusers, err
@@ -152,7 +152,7 @@ func (a TwitterApi) RemoveUserToListIds(user_ids []int64, listID int64, v url.Va
 	if len(user_ids) == 0 {
 		return make([]User, 0), nil
 	}
-	resusers, err := RemoveUserToListIds(user_ids[100:], listID, v)
+	resusers, err := a.RemoveUserToListIds(user_ids[100:], listID, v)
 	user_ids = user_ids[:100]
 	if err != nil {
 		return resusers, err
