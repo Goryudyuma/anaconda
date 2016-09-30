@@ -124,6 +124,9 @@ func (a TwitterApi) AddUserToListIds(user_ids []int64, slug string, owner_id int
 			return resusers, err
 		}
 	}
+	if len(user_ids) == 0 {
+		return resusers, nil
+	}
 	length := 100
 	if len(user_ids) < length {
 		length = len(user_ids)
@@ -134,9 +137,9 @@ func (a TwitterApi) AddUserToListIds(user_ids []int64, slug string, owner_id int
 	}
 
 	var user_ids_string string
-	for i, v := range user_ids {
-		user_ids_string += strconv.FormatInt(v, 10)
-		if i != len(user_ids)-1 {
+	for w, i := range user_ids {
+		user_ids_string += strconv.FormatInt(i, 10)
+		if w != len(user_ids)-1 {
 			user_ids_string += ","
 		}
 	}
@@ -161,6 +164,9 @@ func (a TwitterApi) RemoveUserToListIds(user_ids []int64, slug string, owner_id 
 			return resusers, err
 		}
 	}
+	if len(user_ids) == 0 {
+		return resusers, nil
+	}
 	length := 100
 	if len(user_ids) < length {
 		length = len(user_ids)
@@ -171,9 +177,9 @@ func (a TwitterApi) RemoveUserToListIds(user_ids []int64, slug string, owner_id 
 	}
 
 	var user_ids_string string
-	for i, v := range user_ids {
-		user_ids_string += strconv.FormatInt(v, 10)
-		if i != len(user_ids)-1 {
+	for w, i := range user_ids {
+		user_ids_string += strconv.FormatInt(i, 10)
+		if w != len(user_ids)-1 {
 			user_ids_string += ","
 		}
 	}
