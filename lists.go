@@ -116,11 +116,11 @@ func (a TwitterApi) RemoveMemberFromList(listname string, remove_user_screen_nam
 }
 
 // AddUserToListIds implements /lists/members/create_all.json
-func (a TwitterApi) AddUserToListIds(user_ids []int64, listID int64, v url.Values) (users []User, err error) {
+func (a TwitterApi) AddUserToListIds(user_ids []int64, slug string, owner_id int64, v url.Values) (users []User, err error) {
 	if len(user_ids) == 0 {
 		return make([]User, 0), nil
 	}
-	resusers, err := a.AddUserToListIds(user_ids[100:], listID, v)
+	resusers, err := a.AddUserToListIds(user_ids[100:], slug, owner_id, v)
 	user_ids = user_ids[:100]
 	if err != nil {
 		return resusers, err
@@ -137,8 +137,9 @@ func (a TwitterApi) AddUserToListIds(user_ids []int64, listID int64, v url.Value
 		}
 	}
 
-	v.Set("list_id", strconv.FormatInt(listID, 10))
+	v.Set("slug", slug)
 	v.Set("user_id", user_ids_string)
+	v.Set("owner_id", strconv.FormatInt(owner_id, 10))
 
 	var addUserToListResponse AddUserToListResponse
 
@@ -148,11 +149,11 @@ func (a TwitterApi) AddUserToListIds(user_ids []int64, listID int64, v url.Value
 }
 
 // RemoveUserToListIds implements /lists/members/destroy_all.json
-func (a TwitterApi) RemoveUserToListIds(user_ids []int64, listID int64, v url.Values) (users []User, err error) {
+func (a TwitterApi) RemoveUserToListIds(user_ids []int64, slug string, owner_id int64, v url.Values) (users []User, err error) {
 	if len(user_ids) == 0 {
 		return make([]User, 0), nil
 	}
-	resusers, err := a.RemoveUserToListIds(user_ids[100:], listID, v)
+	resusers, err := a.RemoveUserToListIds(user_ids[100:], slug, owner_id, v)
 	user_ids = user_ids[:100]
 	if err != nil {
 		return resusers, err
@@ -169,8 +170,9 @@ func (a TwitterApi) RemoveUserToListIds(user_ids []int64, listID int64, v url.Va
 		}
 	}
 
-	v.Set("list_id", strconv.FormatInt(listID, 10))
+	v.Set("slug", slug)
 	v.Set("user_id", user_ids_string)
+	v.Set("owner_id", strconv.FormatInt(owner_id, 10))
 
 	var addUserToListResponse AddUserToListResponse
 
